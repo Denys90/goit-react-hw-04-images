@@ -27,11 +27,7 @@ export function App() {
       const { total, fetchedImages } = await fetchData(queryValue, page);
 
       if (total) {
-        const uniqueImages = fetchedImages.filter(
-          newImage =>
-            !images.some(existingImage => existingImage.id === newImage.id)
-        );
-        setImages(prevState => [...prevState, ...uniqueImages]);
+        setImages(prevState => [...prevState, ...fetchedImages]);
       } else {
         alert('Nothing found, try again!');
       }
@@ -40,14 +36,13 @@ export function App() {
     } finally {
       setLoading(false);
     }
-  }, [images, page, queryValue]);
+  }, [page, queryValue]);
   // ===============================================>
   useEffect(() => {
     if (queryValue) {
       fetchImg();
     }
-  }, [queryValue, fetchImg]);
-
+  }, [queryValue, fetchImg, page]);
   // ===============================================>
   const handleSearchSubmit = query => {
     if (queryValue !== query) {
