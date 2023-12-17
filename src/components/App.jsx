@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Global, css } from '@emotion/react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -8,39 +8,15 @@ import Modal from './Modal/Modal';
 import fetchData from './API/fetchData';
 import { Container } from './Styles/Container';
 // ===============================================>
-
 export function App() {
   const [images, setImages] = useState([]);
   const [queryValue, setQueryValue] = useState('');
   const [page, setPage] = useState(1);
-  const [setTotalImg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalImg, setModalImg] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedImageId] = useState(null);
   // ===============================================>
-  useEffect(() => {
-    if (queryValue) {
-      fetchImg();
-    }
-  }, [queryValue]);
-
-  // ===============================================>
-  const handleSearchSubmit = query => {
-    if (queryValue !== query) {
-      setQueryValue(query);
-      setPage(1);
-      setImages([]);
-    }
-  };
-  // ===============================================>
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
-    fetchImg();
-  };
-
-  // ===============================================>
-  const fetchImg = async () => {
+  const fetchImg = useCallback(async () => {
     if (!queryValue) {
       return;
     }
@@ -56,7 +32,6 @@ export function App() {
             !images.some(existingImage => existingImage.id === newImage.id)
         );
         setImages(prevState => [...prevState, ...uniqueImages]);
-        setTotalImg(total);
       } else {
         alert('Nothing found, try again!');
       }
@@ -65,6 +40,26 @@ export function App() {
     } finally {
       setLoading(false);
     }
+  }, [images, page, queryValue]);
+  // ===============================================>
+  useEffect(() => {
+    if (queryValue) {
+      fetchImg();
+    }
+  }, [queryValue, fetchImg]);
+
+  // ===============================================>
+  const handleSearchSubmit = query => {
+    if (queryValue !== query) {
+      setQueryValue(query);
+      setPage(1);
+      setImages([]);
+    }
+  };
+
+  // ===============================================>
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
   };
   // ===============================================>
   const handleCloseModal = () => {
@@ -81,12 +76,12 @@ export function App() {
     <>
       <Global
         styles={css`
-            html: {
+            html {
               boxSizing: ' border-box',
               width: '100vw',
               overflowX: 'hidden',
             },
-            img: {
+            img {
               display: 'block',
               maxWidth: '100%',
               height: 'auto',
@@ -109,11 +104,7 @@ export function App() {
       />
       <Container>
         <Searchbar onSubmit={handleSearchSubmit} />
-        <ImageGallery
-          key={selectedImageId}
-          images={images}
-          onImageClick={handleImageClick}
-        />
+        <ImageGallery images={images} onImageClick={handleImageClick} />
         {loading && <Loader />}
         {images.length > 11 && !loading && <Button onClick={handleLoadMore} />}
         {showModal && (
@@ -121,7 +112,6 @@ export function App() {
             showModal={showModal}
             image={modalImg}
             onClose={handleCloseModal}
-            id={selectedImageId}
           />
         )}
       </Container>
