@@ -8,15 +8,21 @@ import Modal from './Modal/Modal';
 import fetchData from './API/fetchData';
 import { Container } from './Styles/Container';
 // ===============================================>
+type Image = {
+  id: number;
+  webformatURL: string;
+  largeImageURL: string;
+};
+
 export function App() {
-  const [images, setImages] = useState([]);
-  const [queryValue, setQueryValue] = useState('');
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [modalImg, setModalImg] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [images, setImages] = useState<Image[]>([]);
+  const [queryValue, setQueryValue] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [modalImg, setModalImg] = useState<Image | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
   // ===============================================>
-  const fetchImg = useCallback(async () => {
+  const fetchImg = useCallback(async (): Promise<void> => {
     if (!queryValue) {
       return;
     }
@@ -44,7 +50,7 @@ export function App() {
     }
   }, [queryValue, fetchImg, page]);
   // ===============================================>
-  const handleSearchSubmit = query => {
+  const handleSearchSubmit = (query: string): void => {
     if (queryValue !== query) {
       setQueryValue(query);
       setPage(1);
@@ -53,17 +59,17 @@ export function App() {
   };
 
   // ===============================================>
-  const handleLoadMore = () => {
+  const handleLoadMore = (): void => {
     setPage(prevPage => prevPage + 1);
   };
   // ===============================================>
   const handleCloseModal = () => {
     setShowModal(false);
-    setModalImg('');
+    setModalImg(null);
   };
   // ===============================================>
-  const handleImageClick = imageUrl => {
-    setModalImg(imageUrl);
+  const handleImageClick = (image: Image): void => {
+    setModalImg(image);
     setShowModal(true);
   };
   // ===============================================>
@@ -71,31 +77,32 @@ export function App() {
     <>
       <Global
         styles={css`
-            html {
-              boxSizing: ' border-box',
-              width: '100vw',
-              overflowX: 'hidden',
-            },
-            img {
-              display: 'block',
-              maxWidth: '100%',
-              height: 'auto',
-            },
+          html {
+            box-sizing: border-box;
+            width: 100vw;
+            overflow-x: hidden;
+          }
+          img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+          }
 
-            *,
-            *::before,
-            *::after {
-              box-sizing: inherit;
-            }
-            body {
-              margin: 0;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-              background-color: #212121;
-            }
-          `}
+          *,
+          *::before,
+          *::after {
+            box-sizing: inherit;
+          }
+          body {
+            margin: 0;
+            font-family:
+              -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+              Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #212121;
+          }
+        `}
       />
       <Container>
         <Searchbar onSubmit={handleSearchSubmit} />

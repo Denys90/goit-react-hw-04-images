@@ -1,7 +1,10 @@
-import React from 'react';
 import { ButtonStyle } from './ButtonStyle';
 
-const Button = ({ onClick }) => {
+type ButtonProps = {
+  onClick: () => void;
+};
+
+const Button = ({ onClick }: ButtonProps) => {
   return <ButtonStyle onClick={onClick}>Load more</ButtonStyle>;
 };
 

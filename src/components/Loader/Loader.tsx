@@ -1,6 +1,5 @@
-import React from 'react';
 import { ColorRing } from 'react-loader-spinner';
-import { Container } from '../Loader/Container';
+import { Container } from './Container';
 
 const Loader = () => {
   return (

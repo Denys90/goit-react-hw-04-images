@@ -1,6 +1,24 @@
 import axios from 'axios';
 //<------------------------------------------------------------
-async function fetchData(searchQuery, page = 1) {
+type Image = {
+  id: number;
+  webformatURL: string;
+  largeImageURL: string;
+};
+type PixabayResponse = {
+  total: number;
+  totalHits: number;
+  hits: Image[];
+};
+type FetchResult = {
+  fetchedImages: Image[];
+  total: number;
+};
+//<------------------------------------------------------------
+async function fetchData(
+  searchQuery: string,
+  page: number = 1
+): Promise<FetchResult> {
   const MY_API_KEY = '40227453-3557d8d2139416ae0b447ea7a';
   const URL = 'https://pixabay.com/api/';
   const params = {
@@ -14,8 +32,8 @@ async function fetchData(searchQuery, page = 1) {
   };
 
   try {
-    const response = await axios(`${URL}`, { params });
-    const data = await response.data;
+    const response = await axios<PixabayResponse>(`${URL}`, { params });
+    const data = response.data;
     const fetchedImages = data.hits.map(el => ({
       id: el.id,
       webformatURL: el.webformatURL,

@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
-
 import { IoSearchOutline } from 'react-icons/io5';
-import { Container } from '../Searchbar/Container';
+import { Container } from './Container';
 
-function Searchbar({ onSubmit }) {
+type SearchbarProps = {
+  onSubmit: (query: string) => void;
+};
+
+const Searchbar: React.FC<SearchbarProps> = ({ onSubmit }) => {
   const [query, setQuery] = useState('');
-  //----------------------------------------->
-  const handleChange = e => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
-  //----------------------------------------->
-  const handleSubmit = e => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(query);
     setQuery('');
   };
-  //----------------------------------------->
+
   return (
     <Container>
       <form onSubmit={handleSubmit}>
         <button type="submit">
           <span>
-            <IoSearchOutline />
+            {React.createElement(
+              IoSearchOutline as unknown as React.ElementType,
+              { size: 24 }
+            )}
           </span>
         </button>
 
@@ -36,6 +42,6 @@ function Searchbar({ onSubmit }) {
       </form>
     </Container>
   );
-}
+};
 
 export default Searchbar;

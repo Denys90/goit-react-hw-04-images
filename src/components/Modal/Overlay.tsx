@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
-export const Overlay = styled.div`
+type OverlayProps = {
+  showModal: boolean;
+};
+export const Overlay = styled.div<OverlayProps>`
   position: fixed;
   top: 0;
   left: 0;
