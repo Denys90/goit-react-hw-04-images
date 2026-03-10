@@ -13,7 +13,9 @@ const Searchbar: React.FC<SearchbarProps> = ({ onSubmit }) => {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    e: React.SyntheticEvent<HTMLFormElement, SubmitEvent>
+  ) => {
     e.preventDefault();
     onSubmit(query);
     setQuery('');
