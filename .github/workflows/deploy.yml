@@ -4,12 +4,15 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository 🛎️
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -17,7 +20,7 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies, lint, build 🔧
+      - name: Install dependencies and build
         run: |
           npm ci
           npm run lint:js
