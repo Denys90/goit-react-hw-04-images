@@ -15,10 +15,7 @@ type FetchResult = {
   total: number;
 };
 //<------------------------------------------------------------
-async function fetchData(
-  searchQuery: string,
-  page: number = 1
-): Promise<FetchResult> {
+async function fetchData(searchQuery: string, page = 1): Promise<FetchResult> {
   const MY_API_KEY = '40227453-3557d8d2139416ae0b447ea7a';
   const URL = 'https://pixabay.com/api/';
   const params = {
@@ -42,6 +39,7 @@ async function fetchData(
 
     return { fetchedImages, total: data.total };
   } catch (error) {
+    console.error('Ошибка при fetch:', error);
     throw error;
   }
 }

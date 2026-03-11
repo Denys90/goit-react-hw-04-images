@@ -38,6 +38,7 @@ export function App() {
         alert('Nothing found, try again!');
       }
     } catch (error) {
+      console.error('Помилка в App.tsx:', error);
       throw error;
     } finally {
       setLoading(false);

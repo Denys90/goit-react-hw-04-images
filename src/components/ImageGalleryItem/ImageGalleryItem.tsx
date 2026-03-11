@@ -1,7 +1,8 @@
+import React from 'react';
 import { Item } from './Item';
 
 type Image = {
-  id: Number;
+  id: number;
   largeImageURL: string;
   webformatURL: string;
 };
